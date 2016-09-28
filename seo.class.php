@@ -54,10 +54,11 @@ class seo extends ModuleObject
 		return $config;
 	}
 
-	public function addMeta($property, $content, $attr_name = 'property')
+	public function addMeta($property, $content, $attr_name = 'property', $overwrite = false)
 	{
 		if (!$content) return;
 
+		/** @var moduleController $oModuleController */
 		$oModuleController = getController('module');
 		$oModuleController->replaceDefinedLangCode($content);
 		if (!in_array($property, array('og:url'))) {
@@ -65,7 +66,9 @@ class seo extends ModuleObject
 			$content = preg_replace("/(\s+)/", ' ', $content);
 		}
 
-		$this->SEO['meta'][] = array('property' => $property, 'content' => $content, 'attr_name' => $attr_name);
+		if($overwrite || !array_key_exists($property, $this->SEO['meta'])){
+			$this->SEO['meta'][$property] = array('property' => $property, 'content' => $content, 'attr_name' => $attr_name);
+		}
 	}
 
 	public function addLink($rel, $href)
