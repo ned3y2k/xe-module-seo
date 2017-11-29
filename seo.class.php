@@ -54,11 +54,10 @@ class seo extends ModuleObject
 		return $config;
 	}
 
-	public function addMeta($property, $content, $attr_name = 'property', $overwrite = false)
+	public function addMeta($property, $content, $attr_name = 'property')
 	{
 		if (!$content) return;
 
-		/** @var moduleController $oModuleController */
 		$oModuleController = getController('module');
 		$oModuleController->replaceDefinedLangCode($content);
 		if (!in_array($property, array('og:url'))) {
@@ -66,9 +65,7 @@ class seo extends ModuleObject
 			$content = preg_replace("/(\s+)/", ' ', $content);
 		}
 
-		if($overwrite || !array_key_exists($property, $this->SEO['meta'])){
-			$this->SEO['meta'][$property] = array('property' => $property, 'content' => $content, 'attr_name' => $attr_name);
-		}
+		$this->SEO['meta'][] = array('property' => $property, 'content' => $content, 'attr_name' => $attr_name);
 	}
 
 	public function addLink($rel, $href)
@@ -133,7 +130,7 @@ NASCRIPT;
 
 	function moduleInstall()
 	{
-		return new Object();
+		return $this->createObject();
 	}
 
 	function checkUpdate()
@@ -166,7 +163,7 @@ NASCRIPT;
 			}
 		}
 
-		return new Object(0, 'success_updated');
+		return $this->createObject(0, 'success_updated');
 	}
 
 	function moduleUninstall()
@@ -177,7 +174,7 @@ NASCRIPT;
 			$oModuleController->deleteTrigger($trigger[0], $trigger[1], $trigger[2], $trigger[3], $trigger[4]);
 		}
 
-		return new Object();
+		return $this->createObject();
 	}
 }
 /* !End of file */
