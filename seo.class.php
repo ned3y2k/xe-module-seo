@@ -176,5 +176,13 @@ NASCRIPT;
 
 		return $this->createObject();
 	}
+
+    protected function createObject($error = 0, $message = 'success') {
+        if(class_exists("BaseObject")) {
+            return new BaseObject($error, $message);
+        } else {
+            return new Object($error, $message);
+        }
+    }
 }
 /* !End of file */
